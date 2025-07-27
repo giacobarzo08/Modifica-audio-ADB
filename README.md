@@ -52,8 +52,19 @@ sudo apt install python-pip
 sudo apt install python3-venv
 ```
 L'uso di WSL (Windows Subsistem for Linux) è **altamente sconsigliato**: il sistema Linux non è in grado di usare gli altoparlante e le porte USB del hardware.
+
 ## Guida all'uso
 Come prima cosa assicurarsi che la variabile `REMOTE_MUSIC_PATH` contenga il percorso giusto per la dirctory della musica del telefono.
 
-Eseguendo il file `main.py` si aprirà un un display
+Eseguendo il file `main.py` si aprirà un un display, suddiviso in più parti:
+- A sinistra si vedono tutti i file audio della directory in cui viene salvata la musica del telefono (carica solo file `.mp3` e salva i file in estensione `.wav`).
+- E' possibile ricaricare la directroy, qualora i file fossero stati modoficati manualmente.
+- Nella sezione "Audio Analysis" è possibile verificare se l'audio distorce (Check Distorsion), l'audio è bilanciato (canali destro e sinistro) (Check Balance), è presente un fischio crescente in volume (Detect Whistle) o verficare la presenza di frequenze fastidiose (Check Annoying Frequencies). Per queste informazioni, apparirà una maschera che mostra i risultati.
+- Nella sezione "Audio Modification" è possibile aumentare il volume moltiplicando tutti i valori del vettore contenente l'audio per un fattore comune (da inserire a destra del bottone) e rimuovere il rumore di sottofondo, specificando l'istante di inizio e di fine (in secondi) di una pausa (in cui c'è solo rumore).
+- I bottoni della funzione "Visualizzation" consentono di mostrare il plot dell'audio, evidenziando: i limiti di ampiezza, i valori medi positivi e negativi ed i periodi di lungo silenzio.
+
+## Licenza
 *SCRITTO A SCOPO DIDATTICO*
+Non esiste una licenza per questo progetto: potete fare qualsiasi cosa, anche venderlo (sebbene non ricavereste molto...).
+
+Il progetto è stato creato a scopo didattico (compito) e pupplicato a tale scopo.
