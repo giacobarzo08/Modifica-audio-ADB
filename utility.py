@@ -8,7 +8,7 @@ import numpy as np
 from typing import Optional, Union, List
 
 # Initialize a file logger for this module
-log = Logger('debug', 'Audio_For_Android', 'md')
+log = Logger('default', 'Audio_For_Android', 'md')
 
 
 class AudioFile:
@@ -58,7 +58,7 @@ class AudioData:
         self.rate: int = audio_file.sample_rate
 
         # Compute average of positive and negative amplitudes separately
-        positives = [v for v in self.data if v >= 0]
+        positives = [v for v in self.data if v > 0]
         negatives = [v for v in self.data if v < 0]
         avg_pos = sum(positives) / len(positives) if positives else 0
         avg_neg = sum(negatives) / len(negatives) if negatives else 0
@@ -82,8 +82,8 @@ class AudioData:
         left_channel = self.data[0::2]
         right_channel = self.data[1::2]
 
-        avg_left = sum(left_channel) / len(left_channel) if left_channel else 0
-        avg_right = sum(right_channel) / len(right_channel) if right_channel else 0
+        avg_left = sum(left_channel) / len(left_channel) if (len(left_channel) != 0) else 0
+        avg_right = sum(right_channel) / len(right_channel) if (len(right_channel) != 0) else 0
 
         # Balanced if difference within 5%
         return abs(avg_left - avg_right) / max(abs(avg_left), abs(avg_right), 1e-9) <= 0.05
@@ -100,7 +100,7 @@ class AudioData:
         # Compute mean amplitude per frame
         for start in range(0, len(self.data), frame_size):
             frame = self.data[start:start + frame_size]
-            if frame:
+            if len(frame) != 0:
                 means.append(sum(frame) / len(frame))
 
         # Verify strictly increasing trend
@@ -170,7 +170,7 @@ class AudioData:
         """
         Recomputes average positive and negative amplitudes and plots them.
         """
-        positives = [v for v in self.data if v >= 0]
+        positives = [v for v in self.data if v > 0]
         negatives = [v for v in self.data if v < 0]
         avg_pos = sum(positives) / len(positives) if positives else 0
         avg_neg = sum(negatives) / len(negatives) if negatives else 0
@@ -192,7 +192,7 @@ class AudioData:
         and overlays vertical lines at their start/end points.
         """
         if threshold is None:
-            threshold = 0.2 * self._mid_amplitude
+            threshold = 0.5 * self._mid_amplitude
         if min_duration is None:
             min_duration = 0.1 * len(self.data) / self.rate
 

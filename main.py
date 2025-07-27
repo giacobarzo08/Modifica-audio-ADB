@@ -23,7 +23,7 @@ class AudioEditorApp(tk.Tk):
 
         # --- State Variables ---
         self.log = utility.log
-        self.local_audio_dir = os.path.join(self.log._directory, 'Music', 'Music')  # Accesses directory managed by logger
+        self.local_audio_dir = os.path.join(self.log._directory, 'Music', 'Music', 'Music')  # Accesses directory managed by logger
         self.current_file_path = None
         self.audio_data_obj = None
 
@@ -195,8 +195,8 @@ class AudioEditorApp(tk.Tk):
         self.current_file_path = os.path.join(self.local_audio_dir, filename)
 
         try:
-            audio_file = utility.Audio_File(self.current_file_path)
-            self.audio_data_obj = utility.Audio_Data(audio_file)
+            audio_file = utility.AudioFile(self.current_file_path)
+            self.audio_data_obj = utility.AudioData(audio_file)
             
             self.status_bar.config(text=f"File loaded: {filename}")
             Message(f"File loaded successfully: {self.current_file_path}", 'i').on_file(self.log)
@@ -219,28 +219,28 @@ class AudioEditorApp(tk.Tk):
     def run_distortion_check(self):
         if not self._check_audio_loaded(): return
         Message(f"Running distortion check on {self.current_file_path}", 'd').on_file(self.log)
-        result = self.audio_data_obj.distortion()
+        result = self.audio_data_obj.is_distorted()
         messagebox.showinfo("Analysis Result", f"Is the file distorted? {'Yes' if result else 'No'}")
         Message(f"Distortion check result: {result}", 'i').on_file(self.log)
 
     def run_balance_check(self):
         if not self._check_audio_loaded(): return
         Message(f"Running balance check on {self.current_file_path}", 'd').on_file(self.log)
-        result = self.audio_data_obj.balanced()
+        result = self.audio_data_obj.is_balanced()
         messagebox.showinfo("Analysis Result", f"Is the file balanced? {'Yes' if result else 'No'}")
         Message(f"Balance check result: {result}", 'i').on_file(self.log)
 
     def run_whistle_check(self):
         if not self._check_audio_loaded(): return
         Message(f"Running whistle detection on {self.current_file_path}", 'd').on_file(self.log)
-        result = self.audio_data_obj.whistle()
+        result = self.audio_data_obj.is_rising_trend()
         messagebox.showinfo("Analysis Result", f"Whistle detected? {'Yes' if result else 'No'}")
         Message(f"Whistle detection result: {result}", 'i').on_file(self.log)
 
     def run_annoying_freq_check(self):
         if not self._check_audio_loaded(): return
         Message(f"Running annoying frequencies check on {self.current_file_path}", 'd').on_file(self.log)
-        result = self.audio_data_obj.annoying_frequency()
+        result = self.audio_data_obj.has_annoying_frequency()
         messagebox.showinfo("Analysis Result", f"Contains annoying frequencies (2-5 kHz)? {'Yes' if result else 'No'}")
         Message(f"Annoying frequencies check result: {result}", 'i').on_file(self.log)
 
@@ -264,7 +264,7 @@ class AudioEditorApp(tk.Tk):
             start_time = float(self.noise_start.get())
             end_time = float(self.noise_end.get())
             Message(f"Applying noise reduction (from {start_time}s to {end_time}s) to {self.current_file_path}", 'd').on_file(self.log)
-            self.audio_data_obj.reduce_noise(start_time, end_time)
+            self.audio_data_obj.reduce_noise_section(start_time, end_time)
             messagebox.showinfo("Operation Completed", "Noise reduction applied.")
             Message("Noise reduction applied successfully.", 'i').on_file(self.log)
         except ValueError:
@@ -276,17 +276,17 @@ class AudioEditorApp(tk.Tk):
     def show_max_limits(self):
         if not self._check_audio_loaded(): return
         Message(f"Visualizing amplitude limits for {self.current_file_path}", 'd').on_file(self.log)
-        self.audio_data_obj.show_amplitude_limits()
+        self.audio_data_obj.plot_max_amplitude_limits()
 
     def show_average_values(self):
         if not self._check_audio_loaded(): return
         Message(f"Visualizing average values for {self.current_file_path}", 'd').on_file(self.log)
-        self.audio_data_obj.show_average_values()
+        self.audio_data_obj.plot_average_values()
 
     def show_long_pauses(self):
         if not self._check_audio_loaded(): return
         Message(f"Visualizing long pauses for {self.current_file_path}", 'd').on_file(self.log)
-        self.audio_data_obj.plot_long_pauses()
+        self.audio_data_obj.plot_long_silences()
         
     def save_audio_file(self):
         """Saves modified audio data to a new file."""
