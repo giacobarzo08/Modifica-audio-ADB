@@ -3,10 +3,9 @@ import shutil
 import subprocess
 import numpy as np
 from matplotlib import pyplot as plt
-import logger
-from utility import log
 from typing import Optional, Union
 from numpy.typing import ArrayLike
+from audio_fun import copy_all_music_files
 
 # Function to prompt the user for a yes/no confirmation
 def ask_confirmation() -> bool:
@@ -67,7 +66,6 @@ def plot_audio_waveform_with_lines(
     plt.grid(True)
     plt.show()
 
-
 # Function to pull files from an Android device via ADB, copying only .mp3 files
 def adb_pull(remote_path: str, local_dir: Optional[str] = None) -> bool:
     # Determine local directory for pull; default under LOCALAPPDATA/a4a
@@ -77,9 +75,6 @@ def adb_pull(remote_path: str, local_dir: Optional[str] = None) -> bool:
     # Create base directory if it doesn't exist
     os.makedirs(local_dir, exist_ok=True)
     
-    # Ensure a Music subdirectory exists
-    local_music_dir = os.path.join(local_dir, "Music")
-    os.makedirs(local_music_dir, exist_ok=True)
     
     # Prepare a temporary directory for pulling files
     temp_pull_dir = os.path.join(local_dir, "temp_music_pull")
@@ -100,19 +95,14 @@ def adb_pull(remote_path: str, local_dir: Optional[str] = None) -> bool:
         return False
     
     # Look for the pulled Music folder
-    source_music_dir = os.path.join(temp_pull_dir, "Music")
+    source_music_dir = os.path.join(temp_pull_dir)
     if not os.path.exists(source_music_dir):
         print("Music folder not found in the temporary directory.")
         shutil.rmtree(temp_pull_dir)
         return False
     
     # Move only .mp3 files into the local Music directory
-    for root, dirs, files in os.walk(source_music_dir):
-        for filename in files:
-            if filename.lower().endswith('.mp3'):
-                src_file = os.path.join(root, filename)
-                dst_file = os.path.join(local_music_dir, filename)
-                shutil.move(src_file, dst_file)
+    copy_all_music_files(source_music_dir, local_dir)
     
     # Clean up the temporary pull directory
     shutil.rmtree(temp_pull_dir)

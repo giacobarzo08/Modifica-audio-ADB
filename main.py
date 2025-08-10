@@ -3,16 +3,23 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import threading
-import subprocess
-
+import traceback
+import sys
 # Import user-provided modules
 import functions
 import utility
 from logger import Message
 
 # Constant for Android music path
-REMOTE_MUSIC_PATH = '/storage/emulated/0/Music'
+REMOTE_MUSIC_PATH = '/storage/emulated/0/Android/data/org.test.audiorecorder/files/Music'
 
+def get_local_audio_dir():
+    """Returns the local audio directory path."""
+    if sys.platform == 'win32':
+        return os.path.join(os.path.expandvars('%userprofile%'), '.a4a')
+    elif sys.platform == 'linux':
+        return os.path.join(os.path.expandvars('~'), '.a4a')
+    
 class AudioEditorApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -23,7 +30,7 @@ class AudioEditorApp(tk.Tk):
 
         # --- State Variables ---
         self.log = utility.log
-        self.local_audio_dir = os.path.join(self.log._directory, 'Music', 'Music', 'Music')  # Accesses directory managed by logger
+        self.local_audio_dir = get_local_audio_dir()  # Accesses directory managed by logger
         self.current_file_path = None
         self.audio_data_obj = None
 
@@ -170,6 +177,7 @@ class AudioEditorApp(tk.Tk):
             self.status_bar.config(text=error_msg)
             Message(error_msg, 'e').on_file(self.log)
             messagebox.showerror("ADB Error", "Unable to sync with device. Ensure ADB is installed, device is connected, and USB debugging is enabled.")
+            traceback.print_exc()
         
         # Update file list in the main interface
         self.after(0, self.refresh_file_list)
@@ -208,6 +216,7 @@ class AudioEditorApp(tk.Tk):
             messagebox.showerror("File Error", f"Unable to load or read audio file:\n{e}")
             self.audio_data_obj = None
             self.toggle_controls(tk.DISABLED)  # Disable controls again
+            traceback.print_exc()
 
     # --- Callback Methods for Buttons ---
     def _check_audio_loaded(self):
@@ -269,6 +278,7 @@ class AudioEditorApp(tk.Tk):
             Message("Noise reduction applied successfully.", 'i').on_file(self.log)
         except ValueError:
             messagebox.showerror("Input Error", "Start and end times must be numbers.")
+            traceback.print_exc()
         except Exception as e:
             messagebox.showerror("Operation Error", f"Error during noise reduction: {e}")
             Message(f"Error during noise reduction: {e}", 'e').on_file(self.log)

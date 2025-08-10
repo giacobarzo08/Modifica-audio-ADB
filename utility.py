@@ -1,5 +1,6 @@
 import os
 from logger import Logger, Message
+import librosa
 import noisereduce as nr
 import sounddevice as sd
 import soundfile as sf
@@ -24,7 +25,7 @@ class AudioFile:
 
         # Attempt to read audio data and sample rate
         try:
-            self._audio_data, self._sample_rate = sf.read(file_path, dtype='float64')
+            self._audio_data, self._sample_rate = librosa.load(file_path, sr=None)
         except Exception as e:
             Message(f'Error reading file: {e}', 'e').on_file(log)
             raise
