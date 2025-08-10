@@ -1,5 +1,5 @@
 # Modifica-audio-ADB
-## **PREGETTO IN FASE DI COSTRUZIONE**
+
 Questo progetto ha lo scopo facilitare delle semplici modifiche a file audio (estensione .mp3) registati da telefono sfruttando la potenza di calcolo di Hardware di grandi dimensioni e le prestanti librerie Python disponibili su PC (Windows o Linux).
 
 Collegando il telefono cellulare al computer tramite cavo USB (il **debug USB** deve essere abilitato, per quasto è possibile seguire la guida allegata ed il cavo deve **essere in grado di trasferire dati**) il programma è in grado di clonare in automatico tutti i file .mp3 dalla directory Music del telefono fino alla cartella ` %userprifile%\.a4a ` (su Windows) o ` ~/.a4a ` (su Linux). I file potranno poi essere selezionati direttamente nell'**interfaccia grafica**.
