@@ -71,3 +71,5 @@ Eseguendo il file `main.py` (o il file `main.exe`) si aprirà un un display, sud
 Non esiste una licenza per questo progetto: potete fare qualsiasi cosa, anche venderlo (sebbene non ricavereste molto ;-) ).
 
 Il progetto è stato creato a scopo didattico (compito) e pupplicato a tale scopo.
+
+Si ringraziano i creatori di questo reperstory: [https://github.com/Android-for-Python/record_audio_example.git](https://github.com/Android-for-Python/record_audio_example.git)
