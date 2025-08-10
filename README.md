@@ -2,7 +2,7 @@
 ## **PREGETTO IN FASE DI COSTRUZIONE**
 Questo progetto ha lo scopo facilitare delle semplici modifiche a file audio (estensione .mp3) registati da telefono sfruttando la potenza di calcolo di Hardware di grandi dimensioni e le prestanti librerie Python disponibili su PC (Windows o Linux).
 
-Collegando il telefono cellulare al computer tramite cavo USB (il **debug USB** deve essere abilitato, per quasto è possibile seguire la guida allegata ed il cavo deve **essere in grado di trasferire dati**) il programma è in grado di clonare in automatico tutti i file .mp3 dalla directory Music del telefono fino alla cartella ` %userprifile%\AppData\local\a4a\Music\Music ` (su Windows) o ` ~/.a4a ` (su Linux). I file potranno poi essere selezionati direttamente nell'**interfaccia grafica**.
+Collegando il telefono cellulare al computer tramite cavo USB (il **debug USB** deve essere abilitato, per quasto è possibile seguire la guida allegata ed il cavo deve **essere in grado di trasferire dati**) il programma è in grado di clonare in automatico tutti i file .mp3 dalla directory Music del telefono fino alla cartella ` %userprifile%\.a4a ` (su Windows) o ` ~/.a4a ` (su Linux). I file potranno poi essere selezionati direttamente nell'**interfaccia grafica**.
 
 Le modifiche ai file permesse sono le seguenti:
 - aumentare il volume
@@ -22,7 +22,8 @@ E' inoltre possibile vedere il plot della traccia audio mostrando:
 La parte grafica del software è stata scritta dal software AI Gemini 2.5 Pro (anche se Grok dopo la revisione ha deciso di prendersi il merito, [daltrocanto ...](https://help.x.com/it/using-x/about-grok)). Sono stati sfruttati altri software AI per la revisione: ChatGPT 4.1 mini, Grok 3, Copilot, Gemini 2.5 Flash
 
 ## Requisiti di sistema
-E' necessario avere Python 3.6+.
+E' necessario avere Python 3.6+. (o usare il file exe per Windows)
+E' necessario avere installato `pydub` (E' possibile installarlo con `sudo apt install ffmpeg` su Debian-like o `winget install ffmpeg` su Windows)
 
 Le librerie usate sono:
 - `os`: di sistema
@@ -32,16 +33,18 @@ Le librerie usate sono:
 - `typing`: di sistema
 - `numpy`: solitamente installata automaticamente con l'installazione di Python sul computer
 - `sounddevice`: da installare
-- `soundfile`: da installare
+- `pydub`: da installare
+- `ffmpeg-python`: da installare
 - `noisereduce`: da installare
 - `shutil`: di sistema
 - `matplotlib`: da installare
 - `datetime`: di sistema
 - `sys`: di sistema
+- `tracenack`: di sistema
 Ne consegue che il comando da usare per installare i pacchetti mancanti è il seguente:
 ```bash
 python.exe -m pip install --upgrade pip
-pip install sounddevice soundfile noisereduce matplotlib
+pip install sounddevice pydub noisereduce matplotlib ffmpeg-python
 # solo se necessario
 pip install tkinter numpy
 ```
@@ -56,7 +59,7 @@ L'uso di WSL (Windows Subsistem for Linux) è **altamente sconsigliato**: il sis
 ## Guida all'uso
 Come prima cosa assicurarsi che la variabile `REMOTE_MUSIC_PATH` contenga il percorso giusto per la dirctory della musica del telefono.
 
-Eseguendo il file `main.py` si aprirà un un display, suddiviso in più parti:
+Eseguendo il file `main.py` (o il file `main.exe`) si aprirà un un display, suddiviso in più parti:
 - A sinistra si vedono tutti i file audio della directory in cui viene salvata la musica del telefono (carica solo file `.mp3` e salva i file in estensione `.wav`).
 - E' possibile ricaricare la directroy, qualora i file fossero stati modoficati manualmente.
 - Nella sezione "Audio Analysis" è possibile verificare se l'audio distorce (Check Distorsion), l'audio è bilanciato (canali destro e sinistro) (Check Balance), è presente un fischio crescente in volume (Detect Whistle) o verficare la presenza di frequenze fastidiose (Check Annoying Frequencies). Per queste informazioni, apparirà una maschera che mostra i risultati.
@@ -65,6 +68,6 @@ Eseguendo il file `main.py` si aprirà un un display, suddiviso in più parti:
 
 ## Licenza
 *SCRITTO A SCOPO DIDATTICO*
-Non esiste una licenza per questo progetto: potete fare qualsiasi cosa, anche venderlo (sebbene non ricavereste molto...).
+Non esiste una licenza per questo progetto: potete fare qualsiasi cosa, anche venderlo (sebbene non ricavereste molto ;-) ).
 
 Il progetto è stato creato a scopo didattico (compito) e pupplicato a tale scopo.
